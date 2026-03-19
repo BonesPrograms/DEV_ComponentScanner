@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <PackageId>VampirismMod</PackageId>
+    <Authors>Bones</Authors>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <BaseIntermediateOutputPath>.dotnet\obj\</BaseIntermediateOutputPath>
+    <BaseOutputPath>.dotnet\bin\</BaseOutputPath>
+  </PropertyGroup>
+  <Import Project="../Mods.csproj" />
+  <ItemGroup>
+    <Compile Remove="obj\**" />
+    <EmbeddedResource Remove="obj\**" />
+    <None Remove="obj\**" />
+  <Reference Include="dodts_ts">
+    <HintPath>../../ModAssemblies/dodts_ts.dll</HintPath>
+  </Reference>
+  </ItemGroup>
+</Project>

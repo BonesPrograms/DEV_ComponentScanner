@@ -1,0 +1,11 @@
+{
+    "ID": "beast_reflector",
+    "Title": "Component Reader",
+    "Author": "{{M sequence|Mr}}{{B sequence|Beast}}",
+    "Description": "Reads fields of Effects or IParts.",
+    "PreviewImage": "preview.png",
+    "Dependencies":
+    {
+    "dodts_ts" : ">=1.0.0"
+    }
+}
