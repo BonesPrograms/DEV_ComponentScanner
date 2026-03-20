@@ -1,15 +1,12 @@
 using System;
 using XRL;
 using XRL.World;
-using System.Linq;
-using XRL.Wish;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Reflection;
 using XRL.World.Parts;
 using ObjectInformation;
-using XRL.World.Parts.Mutation;
 
 namespace BeastScanner
 {
@@ -40,7 +37,7 @@ namespace BeastScanner
 
         public Type LoopLimit;
 
-        const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Static;
+       public const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Static;
         //loops through all base types so its declared only, but "source type" is tracked (the inheritor at the very end) if its a Field
 
         public ComponentScanner(Type loopLimit)
@@ -328,60 +325,5 @@ namespace BeastScanner
         }
     }
 
-
-
-
-
-    [HasWishCommand]
-    internal static class Commands
-    {
-
-        [WishCommand("readfx")]
-
-        static void ScanFX(string name)
-        {
-            ScanWish(name, "read effect", x => x.Effects);
-        }
-
-        [WishCommand("readpart")]
-
-        static void ScanPart(string name)
-        {
-            ScanWish(name, "read part", x => x.PartsList);
-        }
-
-        static void ScanWish<T>(string name, string action, Func<GameObject, IList<T>> expr) where T : IComponent<GameObject>
-        {
-            if (PickTarget(The.Player, action, out GameObject pick))
-            {
-                string baseClass = typeof(T).Name;
-                if (CheckList(expr(pick), name, out T component))
-                {
-                    IComponent<GameObject>.AddPlayerMessage($"Beginning read of fields in {typeof(T).Name} {component.GetType().Name} on  {pick.DisplayName} {pick.ID}");
-                    new ComponentScanner(typeof(T)).Scan(component);
-                }
-                else
-                {
-                    IComponent<GameObject>.AddPlayerMessage($"{pick.DisplayName} {pick.ID} does not have an {baseClass} named {name} in their {baseClass} list.");
-                }
-            }
-        }
-
-        static bool CheckList<T>(IList<T> list, string name, out T component) where T : IComponent<GameObject>
-        {
-            component = list.FirstOrDefault(x => x.GetType().Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-            return component != null;
-        }
-
-        static bool PickTarget(GameObject obj, string text, out GameObject pick)
-        {
-            IPart part = new() { ParentObject = obj };
-            Cell cell = part.PickDestinationCell(80, AllowVis.OnlyVisible, Locked: true, IgnoreSolid: true, IgnoreLOS: true, RequireCombat: true, XRL.UI.PickTarget.PickStyle.EmptyCell, text, Snap: true);
-            pick = cell?.GetCombatTarget(obj, true, true, true);
-            bool value = pick != null;
-            if (!value && cell != null)
-                XRL.UI.Popup.ShowFail(cell.HasCombatObject() ? $"There is no one there you can {text}." : $"There is no one there to {text}");
-            return value;
-        }
-    }
+    
 }

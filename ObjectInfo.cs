@@ -7,7 +7,7 @@ namespace ObjectInformation
 {
     public class ObjectInfo
     {
-        public readonly Token Token; 
+        public readonly Token Token;
 
         public readonly object Object;
 
@@ -32,27 +32,28 @@ namespace ObjectInformation
             _ => false
         };
 
-                public static Token GetToken(object obj) =>
-        obj switch
-        {
-            null => Token.Null,
-            string => Token.String,
-            bool => Token.Boolean,
-            Enum => Token.Enum,
-            ValueType => Token.Struct, 
-            IDictionary => Token.IDictionary,
-            IList => Token.IList, 
-            GameObject => Token.GameObject,
-            Effect => Token.Effect,
-            IPart => Token.IPart,
-            Delegate => Token.Delegate, //this may require extra work, dont know how to read the delegate value yet
-            _ => Token.ReferenceType //find it interesting how there is no explicit "is reference type" with pattern matching
-        };                          //its just checking if its not a valuetype
+        public static Token GetToken(object obj)
+         =>
+            obj switch
+            {
+                null => Token.Null,
+                string => Token.String,
+                bool => Token.Boolean,
+                Enum => Token.Enum,
+                ValueType => Token.Struct,
+                IDictionary => Token.IDictionary,
+                IList => Token.IList,
+                GameObject => Token.GameObject,
+                Effect => Token.Effect,
+                IPart => Token.IPart,
+                Delegate => Token.Delegate, //this may require extra work, dont know how to read the delegate value yet
+                _ => Token.ReferenceType
+            };
 
 
     }
 
-    public class Element : ObjectInfo 
+    public class Element : ObjectInfo
     {
         public Element(Token token, object Object) : base(token, Object)
         {
@@ -89,5 +90,15 @@ namespace ObjectInformation
         Boolean,
         IPart,
         Effect
+    }
+
+    public enum SimpleToken
+    {
+        Invalid,
+        String,
+        Boolean,
+        Int32,
+        Int64
+
     }
 }
