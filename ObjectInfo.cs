@@ -94,7 +94,7 @@ namespace ObjectInformation
 
     public enum SimpleToken
     {
-        Invalid,
+        Unsupported,
         String,
         Boolean,
         Int32,
