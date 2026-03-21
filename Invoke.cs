@@ -76,7 +76,7 @@ namespace BeastScanner
                 {
                     inputString.Append($" {input.GetType()} {input}");
                 }
-                IComponent<GameObject>.AddPlayerMessage($"Invoked {method.Name} with parameter values {inputString}!");
+                IComponent<GameObject>.AddPlayerMessage($"Invoked {method.DeclaringType.Name}.{method.Name} with parameter values{inputString}!");
                 method.Invoke(obj, inputs);
                 return;
             }
@@ -192,42 +192,44 @@ namespace BeastScanner
         static void ParseInput(SimpleToken token, string input, int i, object[] inputs, ParameterInfo param)
         {
             bool failedParse = true;
-            if (token == SimpleToken.String)
+            switch (token)
             {
-                if (CheckForNull(input, token))
-                    inputs[i] = null;
-                else
-                    inputs[i] = input;
-                failedParse = false;
-            }
-            if (token == SimpleToken.Boolean && !CheckForNull(input, token))
-            {
-                if (input.Equals("false", StringComparison.OrdinalIgnoreCase))
-                {
-                    inputs[i] = false;
+                case SimpleToken.String:
+                    if (CheckForNull(input, token))
+                        inputs[i] = null;
+                    else
+                        inputs[i] = input;
                     failedParse = false;
-                }
-                else if (input.Equals("true", StringComparison.OrdinalIgnoreCase))
-                {
-                    inputs[i] = true;
-                    failedParse = false;
-                }
-            }
-            if (token == SimpleToken.Int32 && !CheckForNull(input, token))
-            {
-                if (int.TryParse(input, out int num))
-                {
-                    inputs[i] = num;
-                    failedParse = false;
-                }
-            }
-            if (token == SimpleToken.Int64 && !CheckForNull(input, token))
-            {
-                if (long.TryParse(input, out long num))
-                {
-                    inputs[i] = num;
-                    failedParse = false;
-                }
+                    break;
+                case SimpleToken.Boolean:
+                    if (!CheckForNull(input, token))
+                    {
+                        if (input.Equals("false", StringComparison.OrdinalIgnoreCase))
+                        {
+                            inputs[i] = false;
+                            failedParse = false;
+                        }
+                        else if (input.Equals("true", StringComparison.OrdinalIgnoreCase))
+                        {
+                            inputs[i] = true;
+                            failedParse = false;
+                        }
+                    }
+                    break;
+                case SimpleToken.Int32:
+                    if (!CheckForNull(input, token) && int.TryParse(input, out int num))
+                    {
+                        inputs[i] = num;
+                        failedParse = false;
+                    }
+                    break;
+                case SimpleToken.Int64:
+                    if (!CheckForNull(input, token) && long.TryParse(input, out long val))
+                    {
+                        inputs[i] = val;
+                        failedParse = false;
+                    }
+                    break;
             }
             if (failedParse)
             {
