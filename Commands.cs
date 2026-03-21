@@ -7,12 +7,14 @@ using System.Linq;
 using System.Reflection;
 using System.ComponentModel;
 using ObjectInformation;
+using XRL.UI;
 
 namespace BeastScanner
 {
     [HasWishCommand]
     internal static class SetFieldCommand
     {
+
         [WishCommand("setfield")] //next up- a really crappy method runner
 
         static void SetField(string input)
@@ -149,6 +151,7 @@ namespace BeastScanner
                 field = fields.FirstOrDefault(x => x.Name.Equals(fieldName, StringComparison.OrdinalIgnoreCase));
                 if (field != null)
                     break;
+                type = type.BaseType;
 
             }
             return field != null;
