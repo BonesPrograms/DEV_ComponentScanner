@@ -1,5 +1,5 @@
 {
-    "ID": "beast_reflector",
+    "ID": "beast_component_reader",
     "Title": "Component Reader",
     "Author": "{{M sequence|Mr}}{{B sequence|Beast}}",
     "Description": "Reads fields of Effects or IParts.",

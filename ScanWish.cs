@@ -10,7 +10,7 @@ namespace BeastScanner
 
 
     [HasWishCommand]
-    internal class ScanCommand : BaseReflective
+    internal class ScanCommand
     {
 
         [WishCommand("readfx")]
@@ -50,6 +50,21 @@ namespace BeastScanner
                     IComponent<GameObject>.AddPlayerMessage($"{pick.DisplayName} {pick.ID} does not have an {baseClass} named {name} in their {baseClass} list.");
                 }
             }
+        }
+
+        static bool PickTarget(GameObject obj, string text, out GameObject pick)
+        {
+            IPart part = new() { ParentObject = obj };
+            Cell cell = part.PickDestinationCell(80, AllowVis.OnlyVisible, Locked: true, IgnoreSolid: true, IgnoreLOS: true, RequireCombat: true, XRL.UI.PickTarget.PickStyle.EmptyCell, text, Snap: true);
+            pick = cell?.GetCombatTarget(obj, true, true, true);
+            bool value = pick != null;
+            if (!value && cell != null)
+                XRL.UI.Popup.ShowFail(cell.HasCombatObject() ? $"There is no one there you can {text}." : $"There is no one there to {text}");
+            return value;
+        }
+        static T FindObject<T>(IList<T> list, string typeName)
+        {
+            return list.FirstOrDefault(x => x.GetType().Name.Equals(typeName, StringComparison.OrdinalIgnoreCase));
         }
     }
 

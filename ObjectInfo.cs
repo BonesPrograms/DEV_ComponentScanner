@@ -92,13 +92,5 @@ namespace ObjectInformation
         Effect
     }
 
-    public enum SimpleToken
-    {
-        Unsupported,
-        String,
-        Boolean,
-        Int32,
-        Int64
 
-    }
 }
